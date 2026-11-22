@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Carousel Studio: design swipeable carousels with 20 templates, live editing, and pixel-accurate PNG, ZIP and PDF export. Runs entirely in your browser.">
+<title>Carousel Studio</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Crect x='7' y='9' width='11' height='14' rx='2' fill='%23fff'/%3E%3Crect x='20' y='11' width='6' height='10' rx='1.5' fill='%23ff6a3d'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/slide.css">
+<link rel="stylesheet" href="css/studio.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></symbol>
+    <symbol id="i-redo" viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m5 18 5-5 3 3 3-3 3 3"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-fit" viewBox="0 0 24 24"><path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2.2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><path d="M12 15v2.2"/></symbol>
+    <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2.2"/><path d="M8 11V8a4 4 0 0 1 7.6-1.7"/><path d="M12 15v2.2"/></symbol>
+  </defs>
+</svg>
+
+<div id="app">
+  <header class="top" role="banner">
+    <div class="top-l">
+      <span class="logo" aria-hidden="true"></span>
+      <label class="sr" for="projName">Project name</label>
+      <input id="projName" class="name" type="text" maxlength="80" autocomplete="off" spellcheck="false" placeholder="Untitled carousel">
+    </div>
+    <div class="top-c">
+      <button class="btn ico" id="undo" title="Undo (Ctrl/Cmd+Z)" aria-label="Undo"><svg class="i"><use href="#i-undo"/></svg></button>
+      <button class="btn ico" id="redo" title="Redo (Ctrl/Cmd+Shift+Z)" aria-label="Redo"><svg class="i"><use href="#i-redo"/></svg></button>
+      <span class="sep" aria-hidden="true"></span>
+      <button class="btn" id="openGallery" title="Browse templates (T)"><svg class="i"><use href="#i-grid"/></svg><span>Templates</span></button>
+      <div class="seg" id="ratioSeg" role="radiogroup" aria-label="Aspect ratio">
+        <button role="radio" data-ratio="4:5">4:5</button><button role="radio" data-ratio="1:1">1:1</button><button role="radio" data-ratio="9:16">9:16</button><button role="radio" data-ratio="16:9">16:9</button>
+      </div>
+    </div>
+    <div class="top-r">
+      <button class="btn ico" id="menuBtn" aria-haspopup="menu" aria-expanded="false" title="Project menu" aria-label="Project menu"><svg class="i"><use href="#i-more"/></svg></button>
+      <button class="btn primary" id="exportBtn" title="Export (Ctrl/Cmd+E)"><svg class="i"><use href="#i-download"/></svg><span>Export</span></button>
+    </div>
+  </header>
+
+  <main class="work">
+    <section class="stage-col" aria-label="Preview">
+      <div class="stage-wrap">
+      <div class="stage" id="stage">
+        <div class="board" id="board"><div class="cwrap" id="host"></div></div>
+      </div>
+        <button class="lock-badge" id="lockBadge" hidden aria-label="Canvas locked. Unlock canvas hand-editing" title="Unlock canvas hand-editing"><svg class="i"><use href="#i-lock"/></svg><span>Canvas locked</span></button>
+        <button class="navbtn prev" id="prev" aria-label="Previous slide"><svg class="i"><use href="#i-left"/></svg></button>
+        <button class="navbtn next" id="next" aria-label="Next slide"><svg class="i"><use href="#i-right"/></svg></button>
+        <div class="zoom" role="group" aria-label="Zoom">
+          <button class="btn ico sm" id="zOut" aria-label="Zoom out"><svg class="i"><use href="#i-minus"/></svg></button>
+          <button class="btn sm zval" id="zFit" title="Fit to screen" aria-label="Fit to screen">Fit</button>
+          <button class="btn ico sm" id="zIn" aria-label="Zoom in"><svg class="i"><use href="#i-plus"/></svg></button>
+        </div>
+      </div>
+      <div class="strip-bar">
+        <div class="strip-tools">
+          <span class="count" id="count" aria-live="polite"></span>
+          <div class="grow"></div>
+          <button class="btn sm" id="addBtn" aria-haspopup="menu" aria-expanded="false"><svg class="i"><use href="#i-plus"/></svg><span>Add slide</span></button>
+          <button class="btn ico sm" id="dupBtn" title="Duplicate (Ctrl/Cmd+D)" aria-label="Duplicate slide"><svg class="i"><use href="#i-copy"/></svg></button>
+          <button class="btn ico sm lock-btn" id="lockCanvasBtn" aria-pressed="false" title="Lock canvas hand-editing" aria-label="Lock canvas hand-editing"><svg class="i"><use href="#i-unlock"/></svg></button>
+          <button class="btn ico sm" id="delBtn" title="Delete (Del)" aria-label="Delete slide"><svg class="i"><use href="#i-trash"/></svg></button>
+        </div>
+        <div class="strip" id="strip" role="listbox" aria-label="Slides" aria-orientation="horizontal"></div>
+      </div>
+    </section>
+
+    <aside class="insp" id="insp" data-open="1" aria-label="Inspector">
+      <div class="tabs" role="tablist">
+        <button role="tab" data-tab="slide" aria-selected="true">Slide</button>
+        <button role="tab" data-tab="design" aria-selected="false">Design</button>
+        <button role="tab" data-tab="media" aria-selected="false">Media</button>
+        <button role="tab" data-tab="brand" aria-selected="false">Brand</button>
+        <button class="btn ico sm collapse" id="collapse" aria-label="Collapse panel" aria-expanded="true"><svg class="i"><use href="#i-chev"/></svg></button>
+      </div>
+      <div class="panels" id="panels">
+
+        <section data-panel="slide">
+          <div class="field"><span class="lbl">Slide type</span><div class="chips" id="kindChips" role="radiogroup" aria-label="Slide type"></div></div>
+          <div id="slideFields"></div>
+          <div class="field">
+            <button class="btn sm" id="hiBtn" type="button"><span id="hiLbl">Highlight selected text</span></button>
+            <p class="hint">Select words in the Heading or Subheading, then press the button (or wrap them in <b>*stars*</b>). Click text on the slide to type; drag any block to move it.</p>
+          </div>
+          <div class="group" id="posGroup">
+            <span class="lbl">Position · <b id="elName">select a block</b></span>
+            <div class="field"><label class="lbl" for="elSel">Block</label><select id="elSel" aria-label="Block to position"></select></div>
+            <div class="row2">
+              <div class="field"><label class="lbl" for="posX">X <output data-pout="x"></output></label><input type="range" id="posX" data-pos="x" min="-40" max="40" step="0.5"></div>
+              <div class="field"><label class="lbl" for="posY">Y <output data-pout="y"></output></label><input type="range" id="posY" data-pos="y" min="-60" max="60" step="0.5"></div>
+            </div>
+            <div class="field"><span class="lbl">Align block</span><div class="seg full" id="posAlign" role="radiogroup" aria-label="Align block"><button role="radio" data-pa="left">Left</button><button role="radio" data-pa="center">Center</button><button role="radio" data-pa="right">Right</button></div></div>
+            <div class="field"><span class="lbl">Text position on slide</span><div class="seg full" id="vAlign" role="radiogroup" aria-label="Vertical position"><button role="radio" data-va="top">Top</button><button role="radio" data-va="middle">Middle</button><button role="radio" data-va="bottom">Bottom</button><button role="radio" data-va="auto">Template</button></div></div>
+            <button class="btn sm" id="posReset">Reset block position</button>
+          </div>
+          <div class="row">
+            <button class="btn" id="mvL"><svg class="i"><use href="#i-left"/></svg><span>Move left</span></button>
+            <button class="btn" id="mvR"><span>Move right</span><svg class="i"><use href="#i-right"/></svg></button>
+          </div>
+        </section>
+
+        <section data-panel="design" hidden>
+          <div class="field"><span class="lbl">Template</span><button class="btn wide" id="tplBtn"><span id="tplName">Cinematic</span><span class="muted">Change</span></button></div>
+          <div class="field"><span class="lbl">Palette</span><div class="swatches" id="palettes" role="radiogroup" aria-label="Palette"></div></div>
+          <div class="field"><span class="lbl">Colours</span>
+            <div class="colors" id="colors">
+              <label><input type="color" data-color="bg"><span>Background</span></label>
+              <label><input type="color" data-color="surface"><span>Surface</span></label>
+              <label><input type="color" data-color="heading"><span>Headline</span></label>
+              <label><input type="color" data-color="body"><span>Body</span></label>
+              <label><input type="color" data-color="accent"><span>Accent</span></label>
+              <label><input type="color" data-color="tag"><span>Tag / badge</span></label>
+              <label><input type="color" data-color="footer"><span>Footer text</span></label>
+            </div>
+            <button class="btn sm" id="colorReset">Reset colours</button>
+          </div>
+          <div class="field"><span class="lbl">Gradient background</span>
+            <label class="check"><input type="checkbox" data-gon><span>Use a custom gradient</span></label>
+            <div class="colors"><label><input type="color" data-gcol="c1"><span>From</span></label><label><input type="color" data-gcol="c2"><span>To</span></label></div>
+            <label class="lbl" for="gAng">Angle <output data-gout></output></label><input type="range" id="gAng" data-gang min="0" max="360" step="5">
+          </div>
+          <div class="field"><span class="lbl">Background effect</span>
+            <div class="chips" id="textures" role="radiogroup" aria-label="Texture"></div>
+            <div class="chips" id="gradients" role="radiogroup" aria-label="Gradient"></div>
+          </div>
+          <div class="field"><span class="lbl">Font pairing</span><div class="pairs" id="pairs" role="radiogroup" aria-label="Font pairing"></div></div>
+          <div class="row2">
+            <div class="field"><label class="lbl" for="fDisp">Heading font</label><select id="fDisp" data-font="display"></select></div>
+            <div class="field"><label class="lbl" for="fBody">Body font</label><select id="fBody" data-font="body"></select></div>
+          </div>
+          <div class="field"><label class="lbl" for="typeScale">Text size <output data-out="type.scale"></output></label><input type="range" id="typeScale" data-bind="type.scale" min="0.6" max="1.6" step="0.02"></div>
+          <div class="field"><label class="lbl" for="typeWeight">Headline weight <output data-out="type.weight"></output></label><input type="range" id="typeWeight" data-bind="type.weight" min="100" max="900" step="50"></div>
+          <div class="field"><label class="lbl" for="typeTrack">Letter-spacing <output data-out="type.tracking"></output></label><input type="range" id="typeTrack" data-bind="type.tracking" min="-0.08" max="0.12" step="0.005"></div>
+          <div class="field"><label class="lbl" for="typeLead">Line-height <output data-out="type.leading"></output></label><input type="range" id="typeLead" data-bind="type.leading" min="0.85" max="1.6" step="0.01"></div>
+          <div class="field"><span class="lbl">Alignment</span><div class="seg full" data-seg="type.align" role="radiogroup" aria-label="Alignment"><button role="radio" data-v="auto">Auto</button><button role="radio" data-v="left">Left</button><button role="radio" data-v="center">Center</button><button role="radio" data-v="right">Right</button></div></div>
+          <div class="field"><span class="lbl">Headline case</span><div class="seg full" data-seg="type.caps" role="radiogroup" aria-label="Headline case"><button role="radio" data-v="auto">Template</button><button role="radio" data-v="on">UPPER</button><button role="radio" data-v="off">Normal</button></div></div>
+          <div class="field"><label class="lbl" for="radius">Corner radius <output data-out="shape.radius"></output></label><input type="range" id="radius" data-bind="shape.radius" min="0" max="8" step="0.2"></div>
+          <div class="field"><label class="lbl" for="padding">Padding <output data-out="shape.pad"></output></label><input type="range" id="padding" data-bind="shape.pad" min="3" max="12" step="0.2"></div>
+          <div class="field"><label class="lbl" for="gapR">Element spacing <output data-out="shape.gap"></output></label><input type="range" id="gapR" data-bind="shape.gap" min="0.3" max="2.5" step="0.05"></div>
+          <label class="check"><input type="checkbox" data-bind="type.autofit"><span>Auto-fit text so nothing clips</span></label>
+          <button class="btn sm" id="designReset">Reset design to template</button>
+        </section>
+
+        <section data-panel="media" hidden>
+          <div class="drop" id="drop" tabindex="0" role="button" aria-label="Add image to this slide">
+            <div class="drop-prev" id="dropPrev" hidden></div>
+            <svg class="i lg"><use href="#i-image"/></svg>
+            <strong id="dropTitle">Drop an image here</strong>
+            <span class="muted">or click to browse · paste works too</span>
+            <input type="file" id="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden>
+          </div>
+          <div id="mediaCtl">
+            <div class="field"><span class="lbl">Fit</span><div class="seg full" data-mseg="fit" role="radiogroup" aria-label="Image fit"><button role="radio" data-v="cover">Fill</button><button role="radio" data-v="contain">Fit inside</button></div></div>
+            <div class="field"><label class="lbl" for="mZoom">Zoom <output data-mout="zoom"></output></label><input type="range" id="mZoom" data-m="zoom" min="1" max="4" step="0.02"></div>
+            <div class="row2">
+              <div class="field"><label class="lbl" for="mX">Position X</label><input type="range" id="mX" data-m="x" min="0" max="100" step="1"></div>
+              <div class="field"><label class="lbl" for="mY">Position Y</label><input type="range" id="mY" data-m="y" min="0" max="100" step="1"></div>
+            </div>
+            <div class="field"><label class="lbl" for="mOp">Opacity <output data-mout="opacity"></output></label><input type="range" id="mOp" data-m="opacity" min="0" max="1" step="0.02"></div>
+            <div class="field" id="scrimField"><label class="lbl" for="mScrim">Contrast scrim <output data-mout="scrim"></output></label><input type="range" id="mScrim" data-m="scrim" min="0" max="100" step="1"></div>
+            <button class="btn sm danger" id="mRemove"><svg class="i"><use href="#i-trash"/></svg><span>Remove image</span></button>
+          </div>
+          <p class="hint" id="mediaHint">Drag the image on the preview to reposition it. Ctrl/Cmd + scroll, or pinch, to zoom.</p>
+          <div class="field"><label class="lbl" for="pasteTo">Paste a copied image into</label>
+            <select id="pasteTo"><option value="main">Main photo</option><option value="circle">Circle photo</option><option value="avatar">Brand avatar</option></select></div>
+
+          <div class="group" id="circleGroup">
+            <span class="lbl sec">Circle</span>
+            <div class="field"><span class="lbl">Dragging the circle moves</span><div class="seg full" id="cMode" role="radiogroup" aria-label="Dragging the circle moves"><button role="radio" data-cm="circle">The circle</button><button role="radio" data-cm="photo">Photo inside</button></div></div>
+            <div class="field"><span class="lbl">Position</span><div class="seg full" id="cPos" role="radiogroup" aria-label="Circle position"><button role="radio" data-cp="off">Off</button><button role="radio" data-cp="tr">Top right</button><button role="radio" data-cp="tl">Top left</button></div></div>
+            <div class="field"><span class="lbl">Circle photo</span>
+              <div class="row"><button class="btn sm" id="cBtn" type="button"><svg class="i"><use href="#i-image"/></svg><span>Upload</span></button><button class="btn sm danger" id="cClear" type="button">Remove</button><input type="file" id="cFile" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden></div></div>
+            <div id="circleCtl">
+              <div class="row2">
+                <div class="field"><label class="lbl" for="cX">Position X <output data-cout="cx"></output></label><input type="range" id="cX" data-c="cx" min="0" max="100" step="0.5"></div>
+                <div class="field"><label class="lbl" for="cY">Position Y <output data-cout="cy"></output></label><input type="range" id="cY" data-c="cy" min="0" max="100" step="0.5"></div>
+              </div>
+              <div class="field"><label class="lbl" for="cSize">Circle size <output data-cout="size"></output></label><input type="range" id="cSize" data-c="size" min="15" max="80" step="1"></div>
+              <div class="field"><label class="lbl" for="cBorder">Outline thickness <output data-cout="border"></output></label><input type="range" id="cBorder" data-c="border" min="0" max="40" step="1"></div>
+              <div class="field"><span class="lbl">Outline colour</span><div class="swatchrow" id="cRing" role="radiogroup" aria-label="Circle outline colour"></div></div>
+              <div class="field"><label class="lbl" for="cZoom">Photo zoom inside circle <output data-cout="zoom"></output></label><input type="range" id="cZoom" data-c="zoom" min="100" max="400" step="1"></div>
+              <div class="row2">
+                <div class="field"><label class="lbl" for="cPx">Photo X <output data-cout="px"></output></label><input type="range" id="cPx" data-c="px" min="0" max="100" step="1"></div>
+                <div class="field"><label class="lbl" for="cPy">Photo Y <output data-cout="py"></output></label><input type="range" id="cPy" data-c="py" min="0" max="100" step="1"></div>
+              </div>
+              <p class="hint">Choose “Photo inside” to slide the picture within the circle. Zoom in first if it won’t move. The dashed ring shows on the preview only.</p>
+            </div>
+          </div>
+
+          <div class="group" id="arrowGroup">
+            <span class="lbl sec">Arrow</span>
+            <div class="field"><label class="lbl" for="aStyle">Style</label><select id="aStyle"></select></div>
+            <div id="arrowCtl">
+              <div class="field"><span class="lbl">Colour</span><div class="swatchrow" id="aColor" role="radiogroup" aria-label="Arrow colour"></div></div>
+              <div class="field"><label class="lbl" for="aSize">Size <output data-aout="size"></output></label><input type="range" id="aSize" data-a="size" min="120" max="700" step="5"></div>
+              <div class="field"><label class="lbl" for="aRot">Rotation <output data-aout="rot"></output></label><input type="range" id="aRot" data-a="rot" min="-180" max="180" step="1"></div>
+              <div class="row2">
+                <div class="field"><label class="lbl" for="aX">Position X <output data-aout="x"></output></label><input type="range" id="aX" data-a="x" min="0" max="100" step="0.5"></div>
+                <div class="field"><label class="lbl" for="aY">Position Y <output data-aout="y"></output></label><input type="range" id="aY" data-a="y" min="0" max="100" step="0.5"></div>
+              </div>
+              <p class="hint" id="arrowHint">Drag the arrow on the preview to place it.</p>
+            </div>
+          </div>
+        </section>
+
+        <section data-panel="brand" hidden>
+          <label class="check"><input type="checkbox" data-bind="brand.show"><span>Show branding bar on every slide</span></label>
+          <div class="field"><label class="lbl" for="bName">Name</label><input type="text" id="bName" data-bind="brand.name" maxlength="60" autocomplete="off"></div>
+          <div class="field"><label class="lbl" for="bHandle">Handle</label><input type="text" id="bHandle" data-bind="brand.handle" maxlength="60" autocomplete="off" spellcheck="false"></div>
+          <div class="field"><span class="lbl">Avatar or logo</span>
+            <div class="row"><button class="btn" id="avatarBtn"><svg class="i"><use href="#i-image"/></svg><span>Upload</span></button><button class="btn" id="avatarClear">Remove</button><input type="file" id="avatarFile" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden></div>
+          </div>
+          <label class="check"><input type="checkbox" data-bind="brand.counter"><span>Slide counter</span></label>
+          <label class="check"><input type="checkbox" data-bind="brand.swipe"><span>Swipe arrow</span></label>
+          <label class="check"><input type="checkbox" data-bind="brand.hideCover"><span>Hide on cover slide</span></label>
+          <div class="field"><span class="lbl">Position</span><div class="seg full" data-seg="brand.pos" role="radiogroup" aria-label="Branding position"><button role="radio" data-v="bottom">Bottom</button><button role="radio" data-v="top">Top</button></div></div>
+        </section>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<div class="popover" id="addMenu" role="menu" hidden></div>
+<div class="popover" id="projMenu" role="menu" hidden>
+  <button role="menuitem" data-act="export-json">Export project (.json)</button>
+  <button role="menuitem" data-act="import-json">Import project…</button>
+  <button role="menuitem" data-act="help">Keyboard shortcuts</button>
+  <button role="menuitem" data-act="reset" class="danger">Reset project</button>
+  <input type="file" id="importFile" accept="application/json,.json" hidden>
+</div>
+
+<dialog id="gallery" aria-labelledby="galTitle">
+  <div class="dlg">
+    <header class="dlg-h">
+      <h2 id="galTitle">Templates</h2>
+      <div class="search"><svg class="i"><use href="#i-search"/></svg><input type="search" id="galSearch" placeholder="Search templates" aria-label="Search templates" autocomplete="off"></div>
+      <button class="btn ico" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button>
+    </header>
+    <div class="dlg-sub"><div class="chips" id="galCats" role="tablist" aria-label="Category"></div>
+      <label class="check sm"><input type="checkbox" id="keepLook"><span>Keep my colours &amp; fonts</span></label></div>
+    <div class="gal" id="galGrid"></div>
+  </div>
+</dialog>
+
+<dialog id="exportDlg" aria-labelledby="expTitle">
+  <div class="dlg narrow">
+    <header class="dlg-h"><h2 id="expTitle">Export</h2><button class="btn ico" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></header>
+    <div class="dlg-b">
+      <div class="field"><span class="lbl">Format</span>
+        <div class="seg full col" id="expFmt" role="radiogroup" aria-label="Format">
+          <button role="radio" data-v="png">PNG · this slide</button>
+          <button role="radio" data-v="zip">ZIP · all slides as PNG</button>
+          <button role="radio" data-v="pdf">PDF · all slides, one page each</button>
+        </div></div>
+      <div class="field"><span class="lbl">Resolution</span>
+        <div class="seg full" id="expScale" role="radiogroup" aria-label="Resolution"><button role="radio" data-v="1">1× (<span data-px="1"></span>)</button><button role="radio" data-v="2">2× retina (<span data-px="2"></span>)</button></div></div>
+      <div class="prog" id="expProg" hidden><div class="bar"><i id="expBar"></i></div><span id="expMsg" aria-live="polite"></span></div>
+      <p class="hint" id="expErr" role="alert" hidden></p>
+    </div>
+    <footer class="dlg-f"><button class="btn" id="expCancel">Cancel</button><button class="btn primary" id="expGo">Export</button></footer>
+  </div>
+</dialog>
+
+<dialog id="helpDlg" aria-labelledby="helpTitle">
+  <div class="dlg narrow">
+    <header class="dlg-h"><h2 id="helpTitle">Keyboard shortcuts</h2><button class="btn ico" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></header>
+    <dl class="keys">
+      <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Previous / next slide</dd>
+      <dt><kbd>Ctrl/⌘</kbd> <kbd>Z</kbd></dt><dd>Undo</dd>
+      <dt><kbd>Ctrl/⌘</kbd> <kbd>Shift</kbd> <kbd>Z</kbd></dt><dd>Redo</dd>
+      <dt><kbd>Ctrl/⌘</kbd> <kbd>D</kbd></dt><dd>Duplicate slide</dd>
+      <dt><kbd>Del</kbd></dt><dd>Delete slide</dd>
+      <dt><kbd>Alt</kbd> <kbd>←</kbd> <kbd>→</kbd></dt><dd>Move slide</dd>
+      <dt><kbd>L</kbd></dt><dd>Lock / unlock canvas hand-editing</dd>
+      <dt><kbd>T</kbd></dt><dd>Template gallery</dd>
+      <dt><kbd>Ctrl/⌘</kbd> <kbd>E</kbd></dt><dd>Export</dd>
+      <dt><kbd>Ctrl/⌘</kbd> <kbd>+</kbd> <kbd>−</kbd> <kbd>0</kbd></dt><dd>Zoom preview</dd>
+    </dl>
+  </div>
+</dialog>
+
+<dialog id="confirmDlg" aria-labelledby="cfTitle">
+  <div class="dlg narrow">
+    <header class="dlg-h"><h2 id="cfTitle">Reset project?</h2></header>
+    <div class="dlg-b"><p>This replaces your carousel with the starter example. You can undo it right after.</p></div>
+    <footer class="dlg-f"><button class="btn" data-close>Cancel</button><button class="btn danger-solid" id="cfGo">Reset</button></footer>
+  </div>
+</dialog>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script src="vendor/html-to-image.js" defer></script>
+<script src="vendor/jszip.min.js" defer></script>
+<script src="vendor/jspdf.umd.min.js" defer></script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

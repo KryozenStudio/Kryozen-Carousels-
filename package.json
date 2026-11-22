@@ -1,0 +1,12 @@
+{
+  "name": "carousel-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Browser-based carousel designer: 20 templates, live editor, PNG/ZIP/PDF export. Zero build step.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "check": "node scripts/validate.mjs"
+  }
+}

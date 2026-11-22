@@ -1,0 +1,656 @@
+/*
+  Slide skeleton shared by every template.
+  Everything is sized in --u, derived from the slide container (cqw / cqh), so one slide scales
+  identically in the stage, filmstrip, gallery and the 2x export with zero JS measuring of the box.
+  Regions: .hd (tag + number) · .media (frame mode) · .mn (content) · .ft (branding)
+  Templates only restyle these through scoped CSS ("&" = .sl.t-<id>).
+*/
+.cwrap {
+  container-type: size;
+  position: relative;
+  overflow: clip;
+}
+
+.sl {
+  --u: min(1cqw, 0.8cqh);
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  isolation: isolate;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--fb);
+  font-size: calc(var(--u) * 3.6);
+  line-height: 1.42;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.sl *,
+.sl *::before,
+.sl *::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* ---------- background layers ---------- */
+.fx,
+.deco,
+.scrim,
+.sl > .media {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.fx {
+  z-index: 0;
+}
+.fx[data-gr='soft'] {
+  background: radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 60%);
+}
+.fx[data-gr='dusk'] {
+  background: linear-gradient(160deg, transparent 20%, color-mix(in srgb, var(--accent2) 30%, transparent) 100%);
+}
+.fx[data-gr='aurora'] {
+  background: radial-gradient(70% 55% at 12% 8%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 70%),
+    radial-gradient(70% 60% at 92% 96%, color-mix(in srgb, var(--accent2) 30%, transparent), transparent 72%);
+}
+.fx[data-tx='grain'] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: calc(var(--u) * 22) calc(var(--u) * 22);
+  opacity: 0.55;
+}
+.fx[data-tx='dots'] {
+  background-image: radial-gradient(color-mix(in srgb, var(--text) 18%, transparent) 12%, transparent 14%);
+  background-size: calc(var(--u) * 3.2) calc(var(--u) * 3.2);
+}
+.fx[data-tx='grid'] {
+  background-image: linear-gradient(color-mix(in srgb, var(--text) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--text) 9%, transparent) 1px, transparent 1px);
+  background-size: calc(var(--u) * 6) calc(var(--u) * 6);
+}
+.fx[data-tx='lines'] {
+  background-image: repeating-linear-gradient(0deg, color-mix(in srgb, var(--text) 8%, transparent) 0 1px, transparent 1px calc(var(--u) * 2.4));
+}
+.deco {
+  z-index: 1;
+}
+
+/* full-bleed media + eased contrast scrim */
+.sl > .media {
+  z-index: 0;
+  overflow: clip;
+  pointer-events: auto;
+}
+.media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.scrim {
+  z-index: 1;
+}
+.scrim[data-s='bottom'] {
+  background: linear-gradient(
+    to top,
+    rgb(0 0 0 / calc(0.92 * var(--scrim))) 0%,
+    rgb(0 0 0 / calc(0.78 * var(--scrim))) 22%,
+    rgb(0 0 0 / calc(0.5 * var(--scrim))) 46%,
+    rgb(0 0 0 / calc(0.16 * var(--scrim))) 70%,
+    rgb(0 0 0 / 0) 100%
+  );
+}
+.scrim[data-s='top'] {
+  background: linear-gradient(
+    to bottom,
+    rgb(0 0 0 / calc(0.92 * var(--scrim))) 0%,
+    rgb(0 0 0 / calc(0.7 * var(--scrim))) 28%,
+    rgb(0 0 0 / calc(0.3 * var(--scrim))) 56%,
+    rgb(0 0 0 / 0) 100%
+  );
+}
+.scrim[data-s='full'] {
+  background: rgb(0 0 0 / calc(0.72 * var(--scrim)));
+}
+
+/* ---------- layout grid ---------- */
+.inner {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas: 'hd' 'mn' 'ft';
+  padding: calc(var(--u) * var(--pad));
+  row-gap: calc(var(--u) * 2.6);
+  overflow: clip;
+}
+.sl[data-mm='frame'] .inner {
+  grid-template-rows: auto minmax(0, 40%) minmax(0, 1fr) auto;
+  grid-template-areas: 'hd' 'md' 'mn' 'ft';
+}
+.sl[data-mm='frame'][data-kind='visual'] .inner {
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+}
+.sl[data-brand='top'] .inner {
+  grid-template-areas: 'ft' 'hd' 'mn';
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+.sl[data-brand='top'][data-mm='frame'] .inner {
+  grid-template-areas: 'ft' 'hd' 'md' 'mn';
+  grid-template-rows: auto auto minmax(0, 40%) minmax(0, 1fr);
+}
+.sl[data-brand='top'][data-mm='frame'][data-kind='visual'] .inner {
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+}
+.hd {
+  grid-area: hd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--u) * 2);
+  min-width: 0;
+}
+.hd:empty {
+  display: none;
+}
+.inner > .media {
+  grid-area: md;
+  position: relative;
+  min-height: 0;
+  border-radius: calc(var(--u) * var(--radius));
+  overflow: clip;
+  pointer-events: auto;
+}
+.mn {
+  grid-area: mn;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: var(--ai, flex-start);
+  text-align: var(--ta, left);
+  overflow: clip;
+}
+/* spacers instead of justify-content: overflow always grows downward, so it is measurable */
+.mn::before {
+  content: '';
+  flex: var(--mn-top, 0) 1 0;
+}
+.mn::after {
+  content: '';
+  flex: var(--mn-bot, 1) 1 0;
+}
+.ft {
+  grid-area: ft;
+}
+
+/* wide canvases (16:9): frame-mode slides become media | text */
+@container (min-aspect-ratio: 5/4) {
+  .sl[data-mm='frame'] .inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: 'hd hd' 'md mn' 'ft ft';
+    column-gap: calc(var(--u) * 5);
+  }
+  .sl[data-mm='frame'][data-brand='top'] .inner {
+    grid-template-areas: 'ft ft' 'hd hd' 'md mn';
+    grid-template-rows: auto auto minmax(0, 1fr);
+  }
+}
+
+/* ---------- placeholder ---------- */
+.media.ph {
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--text) 9%, transparent) 0 calc(var(--u) * 1.1), transparent calc(var(--u) * 1.1) calc(var(--u) * 2.2)), var(--surface);
+  display: grid;
+  place-items: center;
+}
+.media.ph span {
+  font-size: calc(var(--u) * 2.4);
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* ---------- type ---------- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: calc(var(--u) * 0.7) calc(var(--u) * 1.7);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: calc(var(--u) * 2.3);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: clip;
+  text-overflow: ellipsis;
+}
+.num {
+  display: none;
+  font-variant-numeric: tabular-nums;
+}
+.h {
+  font-family: var(--fd);
+  font-weight: var(--hw);
+  font-size: calc(var(--u) * var(--h, 9) * var(--fit) * var(--hs));
+  line-height: var(--hlh);
+  letter-spacing: var(--htr);
+  text-transform: var(--hcase);
+  text-wrap: balance;
+  overflow-wrap: var(--ow, normal);
+  max-width: 100%;
+}
+.sl[data-kind='cover'] .h {
+  --h: 12.5;
+}
+.sl[data-kind='content'] .h {
+  --h: 9;
+}
+.sl[data-kind='visual'] .h {
+  --h: 8;
+}
+.sl[data-kind='stats'] .h {
+  --h: 6.4;
+}
+.sl[data-kind='list'] .h {
+  --h: 7.4;
+}
+.sl[data-kind='cta'] .h {
+  --h: 11;
+}
+.hl {
+  color: var(--accent);
+}
+.sub {
+  margin-top: calc(var(--u) * 2.2 * var(--sp, 1));
+  font-size: calc(var(--u) * 4.1 * var(--fit));
+  line-height: 1.3;
+  color: var(--muted);
+  text-wrap: balance;
+  overflow-wrap: var(--ow, normal);
+  max-width: 100%;
+}
+.sub .hl {
+  color: var(--accent);
+}
+.body {
+  margin-top: calc(var(--u) * 3 * var(--sp, 1));
+  font-size: calc(var(--u) * 3.7 * var(--fit));
+  line-height: 1.5;
+  text-wrap: pretty;
+  overflow-wrap: var(--ow, normal);
+  max-width: 100%;
+}
+.body p + p {
+  margin-top: 0.7em;
+}
+.stat {
+  white-space: nowrap;
+  font-family: var(--fd);
+  font-weight: var(--hw);
+  font-size: calc(var(--u) * 26 * var(--fit) * var(--hs));
+  line-height: 0.95;
+  letter-spacing: var(--htr);
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--accent);
+  overflow-wrap: var(--ow, normal);
+  max-width: 100%;
+}
+.statl {
+  margin-top: calc(var(--u) * 1.6 * var(--sp, 1));
+  font-size: calc(var(--u) * 4.2 * var(--fit));
+  line-height: 1.25;
+  font-weight: 600;
+  text-wrap: balance;
+  overflow-wrap: var(--ow, normal);
+  max-width: 100%;
+}
+.stat ~ .h {
+  margin-top: calc(var(--u) * 5 * var(--sp, 1));
+}
+.q {
+  font-family: var(--fd);
+  font-weight: var(--hw);
+  font-size: calc(var(--u) * 7.6 * var(--fit) * var(--hs));
+  line-height: 1.12;
+  letter-spacing: var(--htr);
+  text-transform: var(--hcase);
+  text-wrap: balance;
+  overflow-wrap: var(--ow, normal);
+  max-width: 100%;
+}
+.q p::before {
+  content: '\201C';
+}
+.q p::after {
+  content: '\201D';
+}
+.by {
+  margin-top: calc(var(--u) * 4 * var(--sp, 1));
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 0.4);
+  font-size: calc(var(--u) * 3.3 * var(--fit));
+  max-width: 100%;
+}
+.by b {
+  font-weight: 700;
+}
+.by span {
+  color: var(--muted);
+}
+.items {
+  list-style: none;
+  padding: 0;
+  margin-top: calc(var(--u) * 3.6 * var(--sp, 1));
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 2.2 * var(--fit));
+  max-width: 100%;
+  width: 100%;
+}
+.items li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: calc(var(--u) * 2.4);
+  align-items: baseline;
+  font-size: calc(var(--u) * 4 * var(--fit));
+  line-height: 1.28;
+  text-align: left;
+}
+.items .n {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.8em;
+  letter-spacing: 0.04em;
+}
+.items .t {
+  overflow-wrap: var(--ow, normal);
+}
+.cbtn {
+  margin-top: calc(var(--u) * 5 * var(--sp, 1));
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: calc(var(--u) * 2) calc(var(--u) * 4);
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 800;
+  font-size: calc(var(--u) * 3.4 * var(--fit));
+  line-height: 1.2;
+  overflow-wrap: var(--ow, normal);
+}
+.body + .cbtn,
+.sub + .cbtn {
+  margin-top: calc(var(--u) * 5 * var(--sp, 1));
+}
+.cbtn + .body {
+  margin-top: calc(var(--u) * 4 * var(--sp, 1));
+}
+
+/* ---------- branding bar ---------- */
+.ft {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--u) * 2);
+  font-size: calc(var(--u) * 2.6);
+  line-height: 1.2;
+  min-width: 0;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 1.6);
+  min-width: 0;
+}
+.av {
+  flex: none;
+  width: calc(var(--u) * 6.4);
+  height: calc(var(--u) * 6.4);
+  border-radius: 50%;
+  overflow: clip;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 800;
+  font-size: calc(var(--u) * 2.4);
+}
+.av img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.bn {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 0.3);
+  min-width: 0;
+}
+.bn b {
+  font-weight: 700;
+  overflow: clip;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bn i {
+  font-style: normal;
+  color: var(--muted);
+  overflow: clip;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nav {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: calc(var(--u) * 2);
+}
+.ct {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.ct em {
+  font-style: normal;
+  color: var(--muted);
+  font-weight: 500;
+}
+.sw {
+  display: grid;
+  place-items: center;
+  width: calc(var(--u) * 6.4);
+  height: calc(var(--u) * 6.4);
+  border-radius: 50%;
+  background: var(--text);
+  color: var(--bg);
+}
+.ar {
+  width: 56%;
+  height: 56%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sl[data-onm='1'] .sw {
+  background: #fff;
+  color: #111;
+}
+
+/* ---------- edit-mode affordances (never present in thumbnails or exports) ---------- */
+.sl.edit [data-f] {
+  cursor: text;
+  border-radius: calc(var(--u) * 0.5);
+  outline: 2px solid transparent;
+  outline-offset: calc(var(--u) * 0.6);
+  transition: outline-color 120ms ease-out;
+  user-select: text;
+  -webkit-user-select: text;
+}
+@media (hover: hover) and (pointer: fine) {
+  .sl.edit [data-f]:hover {
+    outline-color: rgb(91 140 255 / 0.55);
+  }
+}
+.sl.edit [data-f]:focus {
+  outline-color: #5b8cff;
+}
+.sl.edit [data-media] {
+  cursor: grab;
+  touch-action: none;
+}
+.sl.edit [data-media].dragging {
+  cursor: grabbing;
+}
+::selection {
+  background: color-mix(in srgb, var(--accent, #5b8cff) 40%, transparent);
+}
+
+/* ---------- user colour / layout overrides (set from the Design and Slide tabs) ---------- */
+.h, .q { color: var(--hc, var(--text)); }
+.body, .statl, .items li, .by b { color: var(--bc, var(--text)); }
+.items .t .c2 { display: block; margin-top: 0.15em; color: var(--muted); font-size: 0.86em; }
+.sl[data-bgi] { background-image: var(--bgimg); }
+.sl.sl[data-tg] .tag { background: var(--tagbg); color: var(--on-tag); border-color: var(--tagbg); }
+.sl.sl[data-fc] .ft .bn b, .sl.sl[data-fc] .ft .bn i, .sl.sl[data-fc] .ft .ct, .sl.sl[data-fc] .ft .ct em { color: var(--fc); }
+.sl[data-va='top'] .mn { --mn-top: 0; --mn-bot: 1; }
+.sl[data-va='middle'] .mn { --mn-top: 1; --mn-bot: 1; }
+.sl[data-va='bottom'] .mn { --mn-top: 1; --mn-bot: 0; }
+.sl.edit [data-el] { touch-action: none; cursor: grab; }
+.sl.edit [data-el][contenteditable='true'] { cursor: text; touch-action: auto; }
+.sl.edit [data-el].sel { outline: 2px dashed #5b8cff; outline-offset: calc(var(--u) * 0.9); }
+.sl.edit [data-el].moving { cursor: grabbing; }
+
+/* ---------- circle photo + arrow overlays ----------
+   Authored against a 1080px canvas, rendered in cqw (1px@1080 = 0.0926cqw). One circle + one arrow per slide.
+   Static markup (thumbnails, export) carries no data-* hooks and no dashed guide; those exist in edit mode only. */
+.ov {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+}
+.cir {
+  --d: calc(var(--cs) * 1cqw + var(--cb) * 0.18519cqw);
+  --r: calc(var(--cs) * 0.5cqw + var(--cb) * 0.09259cqw);
+  width: var(--d);
+  aspect-ratio: 1;
+  padding: calc(var(--cb) * 0.09259cqw);
+  border-radius: 50%;
+  background: var(--cr, #fff);
+  box-shadow: 0 0 2.222cqw rgb(0 0 0 / 0.45);
+}
+.cir[data-pos='tr'] {
+  right: 2.778cqw;
+  top: 3.148cqw;
+}
+.cir[data-pos='tl'] {
+  left: 2.778cqw;
+  top: 3.148cqw;
+}
+.cir[data-custom] {
+  left: calc(var(--cx) * 100cqw - var(--r));
+  top: calc(var(--cy) * 100cqh - var(--r));
+  right: auto;
+}
+.cir-p {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: clip;
+  background: #3a3d44;
+}
+.cir-p img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.cir-p.ph {
+  display: grid;
+  place-items: center;
+}
+.cir-p.ph span {
+  font-size: calc(var(--u) * 2.4);
+  font-weight: 700;
+  color: #c9ccd3;
+  text-align: center;
+}
+.arw {
+  --L: calc(var(--as) * 0.12963cqw);
+  width: var(--L);
+  height: var(--L);
+  left: calc(var(--ax) * 100cqw - var(--L) / 2);
+  top: calc(var(--ay) * 100cqh - var(--L) / 2);
+  overflow: visible;
+  transform: rotate(var(--ar, 0deg));
+  filter: drop-shadow(0 0 1.481cqw rgb(0 0 0 / 0.5));
+}
+
+/* edit-only affordances: draggable overlays, dashed "photo inside" guide, locked cursors */
+.sl.edit .cir {
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+}
+.sl.edit .arw {
+  pointer-events: none; /* only the hit circle + painted shapes take the pointer */
+  touch-action: none;
+}
+.sl.edit .arw .hit,
+.sl.edit .arw path,
+.sl.edit .arw polygon {
+  pointer-events: all;
+  cursor: grab;
+}
+.sl.edit .ov.moving,
+.sl.edit .ov.moving .hit {
+  cursor: grabbing;
+}
+.cir-guide {
+  display: none;
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 0.37cqw dashed rgb(255 255 255 / 0.95);
+  box-shadow: inset 0 0 0 0.19cqw rgb(0 0 0 / 0.55), 0 0 0 0.19cqw rgb(0 0 0 / 0.35);
+  pointer-events: none;
+}
+.sl.edit[data-cm='photo'] .cir-guide {
+  display: block;
+}
+.sl.edit[data-cm='photo'] .cir {
+  cursor: move;
+}
+.sl.edit[data-locked] [data-el],
+.sl.edit[data-locked] [data-f],
+.sl.edit[data-locked] .cir,
+.sl.edit[data-locked] .arw .hit,
+.sl.edit[data-locked] .arw path,
+.sl.edit[data-locked] .arw polygon,
+.sl.edit[data-locked] [data-media] {
+  cursor: default;
+}
+.sl.edit[data-locked] [data-f],
+.sl.edit[data-locked] [data-f]:hover {
+  outline-color: transparent;
+}
