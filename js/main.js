@@ -9,6 +9,8 @@ import { initStage, renderStage, refit, setZoom, getZoom, layout, blurEditing, m
 import { initFilmstrip, renderStrip, markSelected, updateThumbs, moveSlide, paintBadges } from './ui/filmstrip.js';
 import { initInspector, syncInspector, setTab, pickImage } from './ui/inspector.js';
 import { initGallery, openGallery } from './ui/gallery.js';
+import { initControls, refreshControls, openOptions, setSwatchSource } from './ui/controls.js';
+import { openPreview } from './ui/preview.js';
 import { toast } from './ui/toast.js';
 import { $, $$, download, slug, uid } from './util.js';
 
@@ -40,6 +42,7 @@ function updateChrome() {
   const nm = $('#projName');
   if (nm !== document.activeElement && nm.value !== p.name) nm.value = p.name;
   $$('#ratioSeg button').forEach((b) => b.setAttribute('aria-checked', b.dataset.ratio === p.ratio ? 'true' : 'false'));
+  $('#ratioBtn .rv').textContent = p.ratio;
   $('#count').textContent = `Slide ${ui.slide + 1} of ${p.slides.length}`;
   $('#prev').disabled = ui.slide === 0;
   $('#next').disabled = ui.slide === p.slides.length - 1;
@@ -75,7 +78,7 @@ function schedule() {
     if (need.strip === 'rebuild') renderStrip({ rebuild: true });
     else if (need.strip === 'all') updateThumbs(null);
     else if (need.thumbs) updateThumbs([...need.thumbs]);
-    if (need.inspector) syncInspector();
+    if (need.inspector) (syncInspector(), refreshControls());
     if (need.chrome) updateChrome();
     need.stage = false;
     need.strip = null;
@@ -397,6 +400,16 @@ function wire() {
   $('#zOut').onclick = () => zoomTo(getZoom() / 1.2);
   $('#zFit').onclick = () => zoomTo(1);
 
+  const RATIO_ITEMS = [
+    { value: '4:5', label: '4:5', sub: 'Portrait feed post' },
+    { value: '1:1', label: '1:1', sub: 'Square' },
+    { value: '9:16', label: '9:16', sub: 'Story / Reel' },
+    { value: '16:9', label: '16:9', sub: 'Landscape' },
+  ];
+  $('#ratioBtn').onclick = (e) =>
+    openOptions({ title: 'Aspect ratio', anchor: e.currentTarget, items: RATIO_ITEMS, value: P().ratio, width: 220, onPick: (v) => $(`#ratioSeg [data-ratio="${v}"]`).click() });
+  $('#previewBtn').onclick = (e) => (blurEditing(), openPreview(e.currentTarget));
+
   $('#ratioSeg').addEventListener('click', (e) => {
     const b = e.target.closest('[data-ratio]');
     if (b) {
@@ -486,11 +499,18 @@ async function boot() {
   initFilmstrip();
   initInspector({ openGallery });
   initGallery();
+  // colour sheet quick-picks: the live slide palette
+  setSwatchSource(() => {
+    const c = resolve(P()).colors;
+    return [c.bg, c.surface, c.text, c.accent, c.accent2];
+  });
+  initControls();
   wire();
   layout();
   renderStage();
   renderStrip({ rebuild: true });
   syncInspector();
+  refreshControls();
   updateChrome();
   $('#app').classList.add('ready');
   if (!restored) toast('Welcome! Pick a template or just start typing on the slide.', { ms: 5000 });

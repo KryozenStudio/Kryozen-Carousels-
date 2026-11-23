@@ -50,7 +50,9 @@ export function resolve(p) {
     body: o.body || null,
     tag: o.tag || null,
     footer: o.footer || null,
+    hl: o.hl || null, // custom *highlight* colour; null = the template's own highlight colour
   };
+  colors.hlDefault = t.hl === 'accent2' ? pal.accent2 : colors.accent;
   const pair = PAIRINGS.find((x) => x.id === (p.type.pairing || t.pairing)) || PAIRINGS[0];
   const display = p.type.display || pair.display;
   const body = p.type.body || pair.body;
@@ -171,6 +173,11 @@ export function slideHTML(p, i, { mode = 'static', fit = 1, ow = false } = {}) {
     vars['on-tag'] = onColor(colors.tag);
   }
   if (colors.footer) vars.fc = colors.footer;
+  if (colors.hl) {
+    vars.hl = colors.hl; // text-coloured highlights
+    vars.hlp = colors.hl; // pill highlights: background ...
+    vars.hlt = onColor(colors.hl); // ... and a label colour that stays readable on it
+  }
   const gr = p.theme.grad;
   if (gr && gr.on) vars.bgimg = `linear-gradient(${gr.angle}deg, ${gr.c1}, ${gr.c2})`;
   if (p.type.align !== 'auto') {

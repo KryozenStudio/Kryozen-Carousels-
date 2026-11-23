@@ -20,7 +20,7 @@ export default {
 & .tag { background: none; color: var(--accent); border: 1px solid var(--accent); }
 & .num { display: none; }
 & .h { font-weight: 700; line-height: 1.1; }
-& .hl { font-style: normal; color: var(--accent); }
+& .hl { font-style: normal; color: var(--hl, var(--accent)); }
 & [data-kind='cover'] .h { --h: 11.6; }
 & [data-kind='content'] .h { --h: 8.6; }
 & .sub { font-size: ${u(3.8)}; color: var(--text); opacity: 0.78; }

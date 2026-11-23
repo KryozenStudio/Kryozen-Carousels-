@@ -270,7 +270,7 @@
   --h: 11;
 }
 .hl {
-  color: var(--accent);
+  color: var(--hl, var(--accent));
 }
 .sub {
   margin-top: calc(var(--u) * 2.2 * var(--sp, 1));
@@ -282,7 +282,7 @@
   max-width: 100%;
 }
 .sub .hl {
-  color: var(--accent);
+  color: var(--hl, var(--accent));
 }
 .body {
   margin-top: calc(var(--u) * 3 * var(--sp, 1));

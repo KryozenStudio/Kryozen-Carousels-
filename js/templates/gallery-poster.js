@@ -22,7 +22,7 @@ export default {
 & .num::before { content: 'FIG. '; }
 & .inner > .media { margin: ${u(2.4)}; border-radius: 0; box-shadow: 0 0 0 ${u(2.4)} var(--surface), 0 0 0 calc(${u(2.4)} + 1px) color-mix(in srgb, var(--text) 30%, transparent), 0 ${u(3)} ${u(7)} rgb(0 0 0 / 0.2); }
 & .h { font-weight: 400; line-height: 1.04; }
-& .hl { font-style: italic; color: var(--accent); }
+& .hl { font-style: italic; color: var(--hl, var(--accent)); }
 & [data-kind='cover'] .h { --h: 13; }
 & [data-kind='visual'] .h { --h: 6.6; }
 & .sub { font-family: var(--fm); font-size: ${u(2.4)}; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }

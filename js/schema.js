@@ -276,7 +276,7 @@ export function normalizeProject(raw, templateIds = []) {
   };
   const th = raw.theme || {};
   p.theme.palette = PALETTES.some((x) => x.id === th.palette) ? th.palette : null;
-  for (const k of ['bg', 'surface', 'text', 'accent', 'heading', 'body', 'tag', 'footer']) {
+  for (const k of ['bg', 'surface', 'text', 'accent', 'heading', 'body', 'tag', 'footer', 'hl']) {
     const h = th.overrides && normHex(th.overrides[k], null);
     if (h) p.theme.overrides[k] = h;
   }

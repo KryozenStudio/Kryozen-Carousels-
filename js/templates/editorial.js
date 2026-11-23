@@ -20,7 +20,7 @@ export default {
 & .num { display: block; font-size: ${u(2.3)}; letter-spacing: 0.2em; font-weight: 600; text-transform: uppercase; }
 & .num::before { content: 'No. '; }
 & .h { font-weight: 400; line-height: 1.02; }
-& .hl { font-style: italic; color: var(--accent); }
+& .hl { font-style: italic; color: var(--hl, var(--accent)); }
 & [data-kind='cover'] .h { --h: 15.5; }
 & [data-kind='content'] .h { --h: 11.5; }
 & [data-kind='cta'] .h { --h: 13; }

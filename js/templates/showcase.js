@@ -22,9 +22,9 @@ export default {
 & [data-va='top'] .mn { align-self: start; }
 & [data-va='middle'] .mn { align-self: center; }
 & .h, & .q, & .body, & .statl, & .items li, & .by b { color: var(--bg); }
-& .h { font-weight: 800; line-height: 1.02; }
+& .h { font-weight: 800; line-height: 1.14; }
 & [data-kind='cover'] .h { --h: 10.6; }
-& .hl { color: var(--bg); background: linear-gradient(transparent 56%, var(--accent) 56%); }
+& .hl { background: var(--hlp, var(--accent)); color: var(--hlt, var(--on-accent)); box-shadow: 0.12em 0 0 0 var(--hlp, var(--accent)), -0.12em 0 0 0 var(--hlp, var(--accent)), 0 0 0 0.03em var(--hlp, var(--accent)); border-radius: 0.14em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 & .sub, & .by span { color: color-mix(in srgb, var(--bg) 72%, #fff); }
 & .stat { color: var(--bg); font-size: ${u(20)}; }
 & .statl { font-weight: 600; }

@@ -18,7 +18,7 @@ export default {
 & .tag { background: none; color: var(--accent); padding: 0; font-size: ${u(2)}; letter-spacing: 0.34em; font-weight: 500; }
 & .num { display: block; position: absolute; right: 0; font-size: ${u(2)}; letter-spacing: 0.24em; color: var(--muted); }
 & .h { font-weight: 400; line-height: 1.06; letter-spacing: -0.005em; }
-& .hl { font-style: italic; color: var(--accent); }
+& .hl { font-style: italic; color: var(--hl, var(--accent)); }
 & [data-kind='cover'] .h { --h: 14; }
 & [data-kind='content'] .h { --h: 10; }
 & .sub { font-size: ${u(2.6)}; letter-spacing: 0.24em; text-transform: uppercase; color: var(--muted); margin-top: ${u(4)}; max-width: 80%; }

@@ -18,7 +18,7 @@ export default {
 & .tag { background: var(--text); color: var(--bg); text-transform: none; letter-spacing: 0.02em; }
 & .num { display: none; }
 & .h { font-weight: 700; line-height: 1.02; }
-& .hl { color: var(--accent); }
+& .hl { color: var(--hl, var(--accent)); }
 & [data-kind='cover'] .h { --h: 13; }
 & .stat { font-size: ${u(28)}; }
 & .q { font-size: ${u(7.4)}; }

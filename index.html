@@ -30,6 +30,9 @@
     <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
     <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="m10.5 9.5 4 2.5-4 2.5z"/></symbol>
+    <symbol id="i-paste" viewBox="0 0 24 24"><rect x="6" y="5" width="12" height="16" rx="2"/><path d="M9 5V4h6v1M9.5 11h5M9.5 15h5"/></symbol>
     <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2.2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><path d="M12 15v2.2"/></symbol>
     <symbol id="i-unlock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2.2"/><path d="M8 11V8a4 4 0 0 1 7.6-1.7"/><path d="M12 15v2.2"/></symbol>
   </defs>
@@ -47,7 +50,8 @@
       <button class="btn ico" id="redo" title="Redo (Ctrl/Cmd+Shift+Z)" aria-label="Redo"><svg class="i"><use href="#i-redo"/></svg></button>
       <span class="sep" aria-hidden="true"></span>
       <button class="btn" id="openGallery" title="Browse templates (T)"><svg class="i"><use href="#i-grid"/></svg><span>Templates</span></button>
-      <div class="seg" id="ratioSeg" role="radiogroup" aria-label="Aspect ratio">
+      <button class="btn ratio-btn" id="ratioBtn" type="button" aria-haspopup="listbox" aria-label="Aspect ratio" title="Aspect ratio"><span class="rv">4:5</span><svg class="i" aria-hidden="true"><use href="#i-chev"/></svg></button>
+      <div class="seg" id="ratioSeg" role="radiogroup" aria-label="Aspect ratio" hidden>
         <button role="radio" data-ratio="4:5">4:5</button><button role="radio" data-ratio="1:1">1:1</button><button role="radio" data-ratio="9:16">9:16</button><button role="radio" data-ratio="16:9">16:9</button>
       </div>
     </div>
@@ -63,6 +67,7 @@
       <div class="stage" id="stage">
         <div class="board" id="board"><div class="cwrap" id="host"></div></div>
       </div>
+        <button class="btn ico preview-btn" id="previewBtn" type="button" title="Swipe preview" aria-label="Open swipe preview"><svg class="i"><use href="#i-play"/></svg></button>
         <button class="lock-badge" id="lockBadge" hidden aria-label="Canvas locked. Unlock canvas hand-editing" title="Unlock canvas hand-editing"><svg class="i"><use href="#i-lock"/></svg><span>Canvas locked</span></button>
         <button class="navbtn prev" id="prev" aria-label="Previous slide"><svg class="i"><use href="#i-left"/></svg></button>
         <button class="navbtn next" id="next" aria-label="Next slide"><svg class="i"><use href="#i-right"/></svg></button>
@@ -129,6 +134,7 @@
               <label><input type="color" data-color="heading"><span>Headline</span></label>
               <label><input type="color" data-color="body"><span>Body</span></label>
               <label><input type="color" data-color="accent"><span>Accent</span></label>
+              <label><input type="color" data-color="hl"><span>Highlight</span></label>
               <label><input type="color" data-color="tag"><span>Tag / badge</span></label>
               <label><input type="color" data-color="footer"><span>Footer text</span></label>
             </div>
@@ -166,9 +172,10 @@
             <div class="drop-prev" id="dropPrev" hidden></div>
             <svg class="i lg"><use href="#i-image"/></svg>
             <strong id="dropTitle">Drop an image here</strong>
-            <span class="muted">or click to browse · paste works too</span>
+            <span class="muted">or tap to browse</span>
             <input type="file" id="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden>
           </div>
+          <div class="row"><button class="btn sm grow" id="pasteMain" type="button"><svg class="i"><use href="#i-paste"/></svg><span>Paste image</span></button></div>
           <div id="mediaCtl">
             <div class="field"><span class="lbl">Fit</span><div class="seg full" data-mseg="fit" role="radiogroup" aria-label="Image fit"><button role="radio" data-v="cover">Fill</button><button role="radio" data-v="contain">Fit inside</button></div></div>
             <div class="field"><label class="lbl" for="mZoom">Zoom <output data-mout="zoom"></output></label><input type="range" id="mZoom" data-m="zoom" min="1" max="4" step="0.02"></div>
@@ -181,15 +188,13 @@
             <button class="btn sm danger" id="mRemove"><svg class="i"><use href="#i-trash"/></svg><span>Remove image</span></button>
           </div>
           <p class="hint" id="mediaHint">Drag the image on the preview to reposition it. Ctrl/Cmd + scroll, or pinch, to zoom.</p>
-          <div class="field"><label class="lbl" for="pasteTo">Paste a copied image into</label>
-            <select id="pasteTo"><option value="main">Main photo</option><option value="circle">Circle photo</option><option value="avatar">Brand avatar</option></select></div>
 
           <div class="group" id="circleGroup">
             <span class="lbl sec">Circle</span>
             <div class="field"><span class="lbl">Dragging the circle moves</span><div class="seg full" id="cMode" role="radiogroup" aria-label="Dragging the circle moves"><button role="radio" data-cm="circle">The circle</button><button role="radio" data-cm="photo">Photo inside</button></div></div>
             <div class="field"><span class="lbl">Position</span><div class="seg full" id="cPos" role="radiogroup" aria-label="Circle position"><button role="radio" data-cp="off">Off</button><button role="radio" data-cp="tr">Top right</button><button role="radio" data-cp="tl">Top left</button></div></div>
             <div class="field"><span class="lbl">Circle photo</span>
-              <div class="row"><button class="btn sm" id="cBtn" type="button"><svg class="i"><use href="#i-image"/></svg><span>Upload</span></button><button class="btn sm danger" id="cClear" type="button">Remove</button><input type="file" id="cFile" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden></div></div>
+              <div class="row"><button class="btn sm" id="cBtn" type="button"><svg class="i"><use href="#i-image"/></svg><span>Upload</span></button><button class="btn sm" id="cPaste" type="button"><svg class="i"><use href="#i-paste"/></svg><span>Paste</span></button><button class="btn sm danger" id="cClear" type="button">Remove</button><input type="file" id="cFile" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden></div></div>
             <div id="circleCtl">
               <div class="row2">
                 <div class="field"><label class="lbl" for="cX">Position X <output data-cout="cx"></output></label><input type="range" id="cX" data-c="cx" min="0" max="100" step="0.5"></div>
@@ -227,8 +232,8 @@
           <label class="check"><input type="checkbox" data-bind="brand.show"><span>Show branding bar on every slide</span></label>
           <div class="field"><label class="lbl" for="bName">Name</label><input type="text" id="bName" data-bind="brand.name" maxlength="60" autocomplete="off"></div>
           <div class="field"><label class="lbl" for="bHandle">Handle</label><input type="text" id="bHandle" data-bind="brand.handle" maxlength="60" autocomplete="off" spellcheck="false"></div>
-          <div class="field"><span class="lbl">Avatar or logo</span>
-            <div class="row"><button class="btn" id="avatarBtn"><svg class="i"><use href="#i-image"/></svg><span>Upload</span></button><button class="btn" id="avatarClear">Remove</button><input type="file" id="avatarFile" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden></div>
+          <div class="field" id="avatarField"><span class="lbl">Avatar or logo</span>
+            <div class="row"><button class="btn" id="avatarBtn"><svg class="i"><use href="#i-image"/></svg><span>Upload</span></button><button class="btn" id="avatarPaste" type="button"><svg class="i"><use href="#i-paste"/></svg><span>Paste</span></button><button class="btn" id="avatarClear">Remove</button><input type="file" id="avatarFile" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" hidden></div>
           </div>
           <label class="check"><input type="checkbox" data-bind="brand.counter"><span>Slide counter</span></label>
           <label class="check"><input type="checkbox" data-bind="brand.swipe"><span>Swipe arrow</span></label>

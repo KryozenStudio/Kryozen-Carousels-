@@ -15,6 +15,8 @@ Browser-based Instagram carousel designer. Pick a template, edit on canvas, expo
 - **Images**: per-slide upload, drag, pinch/wheel zoom, opacity, scrim. Large images auto-downscaled. Stored in IndexedDB.
 - **Slides**: add, duplicate, delete, drag-reorder, undo/redo (Ctrl/Cmd+Z), zero-loss template switching.
 - **Brand bar**: name, handle, avatar, slide counter, swipe arrow toggles.
+- **Custom controls**: Studio select sheets/popovers (live font previews), a colour picker (SV pad, hue, hex, swatches), switches, one-tap clipboard Paste per image slot, a compact ratio menu and a full-screen swipe Preview. No native selects, colour dialogs or checkboxes.
+- **Highlight colour** (Design → Colours → Highlight) overrides the template's `*word*` colour.
 - **Studio UI**: dark only. Slide palettes (light or dark) are unaffected.
 - **Export**: PNG (2x), ZIP of all slides, PDF; project JSON save/load. Autosave to browser.
 - Respects `prefers-reduced-motion`.
@@ -65,6 +67,9 @@ js/
   schema.js           fonts, palettes, pairings, project shape, normalizeProject
   state.js            project store, commit(), undo/redo, autosave
   render.js           slide -> HTML, style injection, auto-fit
+  ui/controls.js      select / colour-picker / switch components
+  ui/sheet.js         bottom sheet + popover primitive
+  ui/preview.js       swipe preview
   overlays.js         circle photo + arrow markup / geometry (DOM + SVG)
   export.js           PNG / ZIP / PDF
   assets.js           image store (IndexedDB), downscale, GC

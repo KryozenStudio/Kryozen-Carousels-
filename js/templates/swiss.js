@@ -20,7 +20,7 @@ export default {
 & .tag { background: none; color: var(--text); padding: 0; font-size: ${u(2.6)}; font-weight: 800; letter-spacing: 0.02em; text-transform: none; }
 & .num { display: block; font-size: ${u(2.6)}; font-weight: 800; color: var(--accent); }
 & .h { font-weight: 800; line-height: 0.98; }
-& .hl { color: var(--accent); }
+& .hl { color: var(--hl, var(--accent)); }
 & [data-kind='cover'] .h { --h: 14.5; }
 & .sub, & .body, & .statl { margin-left: 25%; max-width: 75%; }
 & .sub { font-weight: 600; color: var(--text); font-size: ${u(4)}; }

@@ -20,7 +20,7 @@ export default {
 & .sub, & .body { flex: 1 1 42%; font-size: ${u(3.5)}; }
 & .sub { color: var(--muted); }
 & [data-kind='cover'] .h { --h: 11.6; background: var(--accent); color: var(--on-accent); padding: ${u(4.4)}; }
-& [data-kind='cover'] .h .hl, & [data-kind='cta'] .h .hl { color: inherit; text-decoration: underline; text-decoration-thickness: 0.07em; text-underline-offset: 0.12em; }
+& [data-kind='cover'] .h .hl, & [data-kind='cta'] .h .hl { color: inherit; text-decoration: underline; text-decoration-color: var(--hl, currentColor); text-decoration-thickness: 0.07em; text-underline-offset: 0.12em; }
 & [data-kind='cta'] .h { background: var(--accent); color: var(--on-accent); }
 & .stat { flex: 1 1 54%; font-size: ${u(20)}; }
 & .statl { flex: 1 1 30%; font-size: ${u(3.4)}; color: var(--muted); font-weight: 500; }

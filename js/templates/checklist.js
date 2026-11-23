@@ -18,8 +18,8 @@ export default {
 & .tag { border-radius: ${u(1)}; letter-spacing: 0.1em; }
 & .num { display: block; font-size: ${u(2.4)}; font-weight: 800; color: var(--muted); letter-spacing: 0.08em; }
 & .num::before { content: 'TIP '; }
-& .h { font-weight: 800; line-height: 1; }
-& .hl { color: var(--text); background: linear-gradient(transparent 60%, color-mix(in srgb, var(--accent) 30%, transparent) 60%); }
+& .h { font-weight: 800; line-height: 1.14; }
+& .hl { background: var(--hlp, var(--accent)); color: var(--hlt, var(--on-accent)); box-shadow: 0.12em 0 0 0 var(--hlp, var(--accent)), -0.12em 0 0 0 var(--hlp, var(--accent)), 0 0 0 0.03em var(--hlp, var(--accent)); border-radius: 0.14em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 & [data-kind='cover'] .h { --h: 13; }
 & .sub { font-weight: 600; font-size: ${u(4)}; }
 & .body { padding-left: ${u(3)}; border-left: ${u(0.7)} solid var(--accent); }

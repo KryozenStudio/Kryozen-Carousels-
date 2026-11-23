@@ -7,6 +7,7 @@ export default {
   tags: ['type', 'poster', 'loud', 'yellow', 'caps'],
   blurb: 'Oversized wide caps on flat colour. Type is the whole picture.',
   palette: 'butter',
+  hl: 'accent2',
   pairing: 'wide',
   radius: 0,
   pad: 5.6,
@@ -18,7 +19,7 @@ export default {
 & .tag { background: var(--text); color: var(--bg); border-radius: 0; transform: rotate(-2.5deg); font-weight: 800; padding: ${u(1)} ${u(2.2)}; }
 & .num { display: none; }
 & .h { font-weight: 900; line-height: 0.96; letter-spacing: -0.045em; }
-& .hl { color: var(--accent2); }
+& .hl { color: var(--hl, var(--accent2)); }
 & [data-kind='cover'] .h { --h: 17.4; }
 & [data-kind='content'] .h { --h: 12.4; }
 & [data-kind='cta'] .h { --h: 14.6; }

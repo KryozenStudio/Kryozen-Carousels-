@@ -133,7 +133,7 @@ export function syncInspector() {
   checked('#gradients .chip', (b) => b.dataset.grad === r.gradient);
   checked('#pairs .pair', (b) => b.dataset.pair === r.pair.id && !p.type.display && !p.type.body);
   const txt = r.colors.text;
-  const shownColor = { bg: r.colors.bg, surface: r.colors.surface, heading: r.colors.heading || txt, body: r.colors.body || txt, accent: r.colors.accent, tag: r.colors.tag || r.colors.accent, footer: r.colors.footer || txt };
+  const shownColor = { bg: r.colors.bg, surface: r.colors.surface, heading: r.colors.heading || txt, body: r.colors.body || txt, accent: r.colors.accent, tag: r.colors.tag || r.colors.accent, hl: r.colors.hl || r.colors.hlDefault, footer: r.colors.footer || txt };
   $$('[data-color]').forEach((el) => setVal(el, normHex(shownColor[el.dataset.color], '#000000')));
   setVal($('#fDisp'), r.display);
   setVal($('#fBody'), r.body);
@@ -204,7 +204,6 @@ export function syncInspector() {
   checked('[data-mseg=fit] button', (b) => b.dataset.v === s.media.fit);
 
   syncOverlays(p, s, r);
-  $('#pasteTo').value = ui.pasteTo;
 
   $('#avatarClear').disabled = !p.brand.avatar;
   $('#mvL').disabled = ui.slide === 0;
@@ -311,6 +310,32 @@ export async function setCircleImage(file) {
   } catch (e) {
     toast(e.message || 'Could not add that image.');
   }
+}
+
+/** Read an image straight from the system clipboard (needs HTTPS + a user tap). */
+export async function pasteFromClipboard(target = 'main') {
+  const run = (TARGETS[target] || TARGETS.main)[1];
+  if (!navigator.clipboard || !navigator.clipboard.read) return toast('Clipboard access blocked — allow paste permission or tap Upload');
+  let items;
+  try {
+    items = await navigator.clipboard.read();
+  } catch (e) {
+    if (e && (e.name === 'NotAllowedError' || e.name === 'SecurityError' || e.name === 'NotSupportedError')) return toast('Clipboard access blocked — allow paste permission or tap Upload');
+    return toast('No image in clipboard — copy an image first or tap Upload');
+  }
+  for (const it of items) {
+    const type = it.types.find((t) => t.startsWith('image/'));
+    if (!type) continue;
+    try {
+      const blob = await it.getType(type);
+      const ext = type.split('/')[1].replace('jpeg', 'jpg').replace(/[^a-z0-9]/g, '') || 'png';
+      await run(new File([blob], `pasted.${ext}`, { type }));
+      return;
+    } catch {
+      return toast('No image in clipboard — copy an image first or tap Upload');
+    }
+  }
+  toast('No image in clipboard — copy an image first or tap Upload');
 }
 
 const TARGETS = { main: ['Main photo', (f) => setSlideImage(f)], circle: ['Circle photo', (f) => setCircleImage(f)], avatar: ['Brand avatar', (f) => setAvatar(f)] };
@@ -553,7 +578,14 @@ function bind() {
     commit((p) => (p.slides.find((x) => x.id === id).circle.asset = null), { scope: 'slide', ids: [id] });
     collect();
   };
-  $('#pasteTo').onchange = (e) => (ui.pasteTo = TARGETS[e.target.value] ? e.target.value : 'main');
+  // one-tap Paste for each image slot (async Clipboard API: works on phones, where there is no Ctrl+V)
+  $('#pasteMain').onclick = () => pasteFromClipboard('main');
+  $('#cPaste').onclick = () => pasteFromClipboard('circle');
+  $('#avatarPaste').onclick = () => pasteFromClipboard('avatar');
+  // Ctrl/Cmd+V goes to whichever slot you last touched: the Circle section, the Brand avatar, otherwise the main photo
+  panels.addEventListener('focusin', (e) => {
+    ui.pasteTo = e.target.closest('#circleGroup') ? 'circle' : e.target.closest('#avatarField') ? 'avatar' : 'main';
+  });
 
   // block selector: reposition any block from the panel, even on a locked canvas
   $('#elSel').onchange = (e) => selectEl(e.target.value || null);
@@ -640,7 +672,6 @@ function bind() {
     e.preventDefault();
     const [label, run] = TARGETS[ui.pasteTo] || TARGETS.main;
     run(f);
-    toast(`Pasted into ${label}`);
   });
 
   $('#projName').addEventListener('input', (e) => commit((p) => (p.name = e.target.value), { key: 'name', scope: 'meta', source: 'sidebar' }));

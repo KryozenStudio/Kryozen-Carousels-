@@ -28,7 +28,7 @@ export default {
 & .num { display: block; font-family: var(--fd); font-size: ${u(5)}; font-weight: 500; color: var(--accent); }
 & [data-mm='frame'] .num { color: #fff; text-shadow: 0 0 ${u(2)} rgb(0 0 0 / 0.5); }
 & .h { font-weight: 600; }
-& .hl { color: var(--accent); font-style: italic; }
+& .hl { color: var(--hl, var(--accent)); font-style: italic; }
 & [data-kind='cover'] .h { --h: 10.4; }
 & [data-kind='content'] .h { --h: 8.4; }
 & [data-kind='visual'] .h { --h: 7.2; }

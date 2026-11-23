@@ -18,7 +18,7 @@ export default {
 & .num { display: block; font-family: var(--fb); font-size: ${u(2.2)}; letter-spacing: 0.18em; font-weight: 700; text-transform: uppercase; }
 & .num::before { content: 'No. '; }
 & .h { font-weight: 900; line-height: 1.02; letter-spacing: -0.02em; }
-& .hl { color: var(--accent); font-style: italic; }
+& .hl { color: var(--hl, var(--accent)); font-style: italic; }
 & [data-kind='cover'] .h { --h: 13.4; padding-bottom: ${u(2.2)}; border-bottom: 1px solid var(--text); width: 100%; }
 & .sub { font-family: var(--fd); font-style: italic; font-size: ${u(4.8)}; line-height: 1.2; color: var(--text); font-weight: 400; }
 & .body { text-align: left; hyphens: auto; font-size: ${u(3.4)}; line-height: 1.5; max-width: 100%; }
