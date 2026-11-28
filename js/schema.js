@@ -337,7 +337,7 @@ export function normalizeProject(raw, templateIds = []) {
       const x = num(e.x, 0, -80, 80);
       const y = num(e.y, 0, -80, 80);
       const a = oneOf(e.a, ['left', 'center', 'right'], null);
-      const sc = num(e.s, 1, 0.5, 2);
+      const sc = num(e.s, 1, 0.2, 2);
       if (x || y || a || sc !== 1) base.el[k] = { x, y, a, s: sc };
     }
     base.valign = oneOf(s.valign, ['top', 'middle', 'bottom'], null);
@@ -367,5 +367,5 @@ export const assetIdsOf = (p) => {
 
 /** Inline `*highlight*` markup → safe HTML. */
 export function inlineMarkup(text) {
-  return esc(text).replace(/\*([^*\n]+)\*/g, '<span class="hl">$1</span>');
+  return esc(text).replace(/\*([^*\n]+)\*/g, '<span class="hl">$1</span>').replace(/\r?\n/g, '<br>');
 }

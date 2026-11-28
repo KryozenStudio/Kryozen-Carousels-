@@ -20,6 +20,8 @@ const setPath = (o, path, v) => {
   t[k[k.length - 1]] = v;
 };
 const getPath = (o, path) => path.split('.').reduce((a, k) => a?.[k], o);
+const uiToScale = (v) => (v <= 60 ? +(0.2 + (v / 60) * 0.8).toFixed(4) : +(1 + ((v - 60) / 40) * 1).toFixed(4));
+const scaleToUi = (s) => (s <= 1 ? Math.round(((s - 0.2) / 0.8) * 60) : Math.round(60 + ((s - 1) / 1) * 40));
 
 /* ---------- tabs ---------- */
 export function setTab(name) {
@@ -150,8 +152,8 @@ export function syncInspector() {
   $('#elName').textContent = key ? EL_LABELS[key] : 'select a block';
   setVal($('#posX'), eo.x);
   setVal($('#posY'), eo.y);
-  setVal($('#posS'), eo.s ?? 1);
-  $$('[data-pout]').forEach((o) => (o.textContent = o.dataset.pout === 's' ? Math.round((eo.s ?? 1) * 100) + '%' : eo[o.dataset.pout]));
+  setVal($('#posS'), scaleToUi(eo.s ?? 1));
+  $('[data-pout]').forEach((o) => (o.textContent = o.dataset.pout === 's' ? scaleToUi(eo.s ?? 1) + '%' : eo[o.dataset.pout]));
   checked('#posAlign button', (b) => b.dataset.pa === eo.a);
   checked('#vAlign button', (b) => b.dataset.va === (s.valign || 'auto'));
 
@@ -463,7 +465,7 @@ function bind() {
       const ax = el.dataset.pos;
       commit((p) => {
         const s = p.slides.find((x) => x.id === id);
-        const o = (s.el[key] = { x: 0, y: 0, a: null, s: 1, ...s.el[key], [ax]: parseFloat(el.value) });
+        const o = (s.el[key] = { x: 0, y: 0, a: null, s: 1, ...s.el[key], [ax]: ax === 's' ? uiToScale(parseFloat(el.value)) : parseFloat(el.value) });
         if (!o.x && !o.y && !o.a && (o.s ?? 1) === 1) delete s.el[key];
       }, { key: `el:${id}:${key}:${ax}`, scope: 'slide', ids: [id], source: 'sidebar' });
     } else if (el.dataset.gon !== undefined) {

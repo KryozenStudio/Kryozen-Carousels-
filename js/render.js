@@ -227,7 +227,7 @@ export function slideHTML(p, i, { mode = 'static', fit = 1, ow = false, measure 
       break;
     case 'quote':
       mn =
-        (has(f.quote) ? `<blockquote class="q"${E('quote')}><p${attr('quote')}>${esc(f.quote)}</p></blockquote>` : '') +
+        (has(f.quote) ? `<blockquote class="q"${E('quote')}><p${attr('quote')}>${esc(f.quote).replace(/\r?\n/g, '<br>')}</p></blockquote>` : '') +
         (has(f.author) || has(f.role)
           ? `<div class="by"${E('by')}>${has(f.author) ? `<b${attr('author')}>${esc(f.author)}</b>` : ''}${has(f.role) ? `<span${attr('role')}>${esc(f.role)}</span>` : ''}</div>`
           : '');
