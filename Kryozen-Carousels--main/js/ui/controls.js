@@ -96,7 +96,7 @@ function enhanceSelect(sel) {
   const title = (label && label.textContent.trim()) || sel.getAttribute('aria-label') || 'Choose';
   const btn = document.createElement('button');
   btn.type = 'button';
-  btn.className = 'sel';
+  btn.className = 'sel-btn';
   btn.id = id + '-btn';
   btn.setAttribute('aria-haspopup', 'listbox');
   btn.setAttribute('aria-expanded', 'false');
