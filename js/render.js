@@ -121,7 +121,7 @@ export function slideHTML(p, i, { mode = 'static', fit = 1, ow = false, measure 
     if (e) {
       // measuring ignores offset + scale so manual placement never makes autofit shrink the rest of the slide
       if (!measure && (e.x || e.y)) st += `translate:calc(var(--u0) * ${e.x}) calc(var(--u0) * ${e.y});`;
-      if (!measure && e.s && e.s !== 1) st += `--u:calc(var(--u0) * ${e.s});`;
+      if (!measure && e.s && e.s !== 1) st += `zoom:${e.s};`;
       if (e.a) st += `align-self:${e.a === 'left' ? 'flex-start' : e.a === 'right' ? 'flex-end' : 'center'};text-align:${e.a};`;
     }
     return ` data-el="${k}"${st ? ` style="${st}"` : ''}`;
