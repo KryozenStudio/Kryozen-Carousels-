@@ -337,7 +337,8 @@ export function normalizeProject(raw, templateIds = []) {
       const x = num(e.x, 0, -80, 80);
       const y = num(e.y, 0, -80, 80);
       const a = oneOf(e.a, ['left', 'center', 'right'], null);
-      if (x || y || a) base.el[k] = { x, y, a };
+      const sc = num(e.s, 1, 0.5, 2);
+      if (x || y || a || sc !== 1) base.el[k] = { x, y, a, s: sc };
     }
     base.valign = oneOf(s.valign, ['top', 'middle', 'bottom'], null);
     base.circle = normCircle(s.circle, base.circle);

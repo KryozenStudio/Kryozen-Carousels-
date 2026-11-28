@@ -104,7 +104,7 @@ const initials = (n) =>
     .join('')
     .toUpperCase() || '·';
 
-export function slideHTML(p, i, { mode = 'static', fit = 1, ow = false } = {}) {
+export function slideHTML(p, i, { mode = 'static', fit = 1, ow = false, measure = false } = {}) {
   const r = resolve(p);
   const { t, colors } = r;
   const s = p.slides[i];
@@ -119,7 +119,9 @@ export function slideHTML(p, i, { mode = 'static', fit = 1, ow = false } = {}) {
     const e = s.el && s.el[k];
     let st = '';
     if (e) {
-      if (e.x || e.y) st += `translate:calc(var(--u) * ${e.x}) calc(var(--u) * ${e.y});`;
+      // measuring ignores offset + scale so manual placement never makes autofit shrink the rest of the slide
+      if (!measure && (e.x || e.y)) st += `translate:calc(var(--u0) * ${e.x}) calc(var(--u0) * ${e.y});`;
+      if (!measure && e.s && e.s !== 1) st += `--u:calc(var(--u0) * ${e.s});`;
       if (e.a) st += `align-self:${e.a === 'left' ? 'flex-start' : e.a === 'right' ? 'flex-end' : 'center'};text-align:${e.a};`;
     }
     return ` data-el="${k}"${st ? ` style="${st}"` : ''}`;
@@ -310,7 +312,7 @@ export function measureFitInfo(p, i) {
   const host = getMeasure();
   host.style.width = W + 'px';
   host.style.height = H + 'px';
-  host.innerHTML = slideHTML(p, i, { mode: 'static', fit: 1 });
+  host.innerHTML = slideHTML(p, i, { mode: 'static', fit: 1, measure: true });
   const sl = host.firstElementChild;
   const inner = sl.querySelector('.inner');
   const mn = sl.querySelector('.mn');

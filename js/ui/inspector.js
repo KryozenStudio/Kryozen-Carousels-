@@ -145,12 +145,13 @@ export function syncInspector() {
   $('[data-gout]').textContent = g.angle + '°';
   // position group
   const key = ui.el && availableEls(p, ui.slide).includes(ui.el) ? ui.el : null;
-  const eo = (key && s.el[key]) || { x: 0, y: 0, a: null };
+  const eo = (key && s.el[key]) || { x: 0, y: 0, a: null, s: 1 };
   $('#posGroup').dataset.empty = key ? '0' : '1';
   $('#elName').textContent = key ? EL_LABELS[key] : 'select a block';
   setVal($('#posX'), eo.x);
   setVal($('#posY'), eo.y);
-  $$('[data-pout]').forEach((o) => (o.textContent = eo[o.dataset.pout]));
+  setVal($('#posS'), eo.s ?? 1);
+  $$('[data-pout]').forEach((o) => (o.textContent = o.dataset.pout === 's' ? Math.round((eo.s ?? 1) * 100) + '%' : eo[o.dataset.pout]));
   checked('#posAlign button', (b) => b.dataset.pa === eo.a);
   checked('#vAlign button', (b) => b.dataset.va === (s.valign || 'auto'));
 
@@ -393,7 +394,7 @@ function bind() {
       const key = ui.el;
       return commit((p) => {
         const s = p.slides.find((x) => x.id === id);
-        s.el[key] = { x: 0, y: 0, ...s.el[key], a: pa.dataset.pa };
+        s.el[key] = { x: 0, y: 0, a: null, s: 1, ...s.el[key], a: pa.dataset.pa };
       }, { scope: 'slide', ids: [id] });
     }
     const va = e.target.closest('[data-va]');
@@ -462,7 +463,8 @@ function bind() {
       const ax = el.dataset.pos;
       commit((p) => {
         const s = p.slides.find((x) => x.id === id);
-        s.el[key] = { x: 0, y: 0, a: null, ...s.el[key], [ax]: parseFloat(el.value) };
+        const o = (s.el[key] = { x: 0, y: 0, a: null, s: 1, ...s.el[key], [ax]: parseFloat(el.value) });
+        if (!o.x && !o.y && !o.a && (o.s ?? 1) === 1) delete s.el[key];
       }, { key: `el:${id}:${key}:${ax}`, scope: 'slide', ids: [id], source: 'sidebar' });
     } else if (el.dataset.gon !== undefined) {
       commit((p) => (p.theme.grad.on = el.checked), { scope: 'global' });

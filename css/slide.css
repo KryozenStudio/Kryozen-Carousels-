@@ -12,7 +12,8 @@
 }
 
 .sl {
-  --u: min(1cqw, 0.8cqh);
+  --u0: min(1cqw, 0.8cqh);
+  --u: var(--u0);
   position: absolute;
   inset: 0;
   overflow: clip;
@@ -535,7 +536,7 @@
 .sl[data-va='bottom'] .mn { --mn-top: 1; --mn-bot: 0; }
 .sl.edit [data-el] { touch-action: none; cursor: grab; }
 .sl.edit [data-el][contenteditable='true'] { cursor: text; touch-action: auto; }
-.sl.edit [data-el].sel { outline: 2px dashed #5b8cff; outline-offset: calc(var(--u) * 0.9); }
+.sl.edit [data-el].sel { outline: 2px dashed #5b8cff; outline-offset: calc(var(--u0) * 0.9); }
 .sl.edit [data-el].moving { cursor: grabbing; }
 
 /* ---------- circle photo + arrow overlays ----------

@@ -348,7 +348,7 @@ function bindElDrag(h) {
     return Math.min(r.width / 100, r.height * 0.008);
   };
   const paint = rafThrottle(() => {
-    if (d) d.node.style.translate = `calc(var(--u) * ${d.x}) calc(var(--u) * ${d.y})`;
+    if (d) d.node.style.translate = `calc(var(--u0) * ${d.x}) calc(var(--u0) * ${d.y})`;
   });
   h.addEventListener('pointerdown', (e) => {
     if (e.button > 0 || editing) return;
@@ -395,9 +395,9 @@ function bindElDrag(h) {
         (p) => {
           const s = p.slides.find((x) => x.id === g.id);
           if (!s) return;
-          const o = s.el[g.key] || { x: 0, y: 0, a: null };
+          const o = s.el[g.key] || { x: 0, y: 0, a: null, s: 1 };
           s.el[g.key] = { ...o, x: g.x, y: g.y };
-          if (!s.el[g.key].x && !s.el[g.key].y && !s.el[g.key].a) delete s.el[g.key];
+          if (!s.el[g.key].x && !s.el[g.key].y && !s.el[g.key].a && (s.el[g.key].s ?? 1) === 1) delete s.el[g.key];
         },
         { scope: 'slide', ids: [g.id], source: 'stage' }
       );
