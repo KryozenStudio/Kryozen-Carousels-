@@ -124,8 +124,13 @@ function bindInline(h) {
       return;
     }
     editing = true;
-    if (el.contentEditable !== 'true') {
-      el.contentEditable = 'true';
+    if (!el.isContentEditable) {
+      try {
+        el.contentEditable = FIELDS[el.dataset.f].kind === 'text' ? 'plaintext-only' : 'true';
+      } catch {
+        el.contentEditable = 'true'; // engines without plaintext-only
+      }
+      if (!el.isContentEditable) el.contentEditable = 'true';
       el.setAttribute('role', 'textbox');
     }
     const f = el.dataset.f;

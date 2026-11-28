@@ -367,5 +367,8 @@ export const assetIdsOf = (p) => {
 
 /** Inline `*highlight*` markup → safe HTML. */
 export function inlineMarkup(text) {
-  return esc(text).replace(/\*([^*\n]+)\*/g, '<span class="hl">$1</span>').replace(/\r?\n/g, '<br>');
+  return esc(text)
+    .split(/\r?\n/)
+    .map((ln) => ln.replace(/\*([^*]+)\*/g, '<span class="hl">$1</span>'))
+    .join('<br>');
 }

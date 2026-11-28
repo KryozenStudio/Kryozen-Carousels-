@@ -153,7 +153,7 @@ export function syncInspector() {
   setVal($('#posX'), eo.x);
   setVal($('#posY'), eo.y);
   setVal($('#posS'), scaleToUi(eo.s ?? 1));
-  $('[data-pout]').forEach((o) => (o.textContent = o.dataset.pout === 's' ? scaleToUi(eo.s ?? 1) + '%' : eo[o.dataset.pout]));
+  $$('[data-pout]').forEach((o) => (o.textContent = o.dataset.pout === 's' ? scaleToUi(eo.s ?? 1) + '%' : eo[o.dataset.pout]));
   checked('#posAlign button', (b) => b.dataset.pa === eo.a);
   checked('#vAlign button', (b) => b.dataset.va === (s.valign || 'auto'));
 

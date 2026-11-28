@@ -83,7 +83,7 @@ function itemsOf(sel) {
   const out = [];
   for (const n of sel.children) {
     if (n.tagName === 'OPTGROUP') for (const o of n.children) out.push({ value: o.value, label: o.textContent, group: n.label });
-    else if (n.tagName === 'OPTION' && n.value !== '') out.push({ value: n.value, label: n.textContent });
+    else if (n.tagName === 'OPTION' && (n.value !== '' || sel.hasAttribute('data-allow-empty'))) out.push({ value: n.value, label: n.textContent });
   }
   return out;
 }
